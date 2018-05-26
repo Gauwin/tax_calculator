@@ -6,6 +6,7 @@
 LAST_UPDATE = "27/05/2018"
 TAX_THRESHOLDS = (18200, 37000, 87000, 180000)  # Tax Brackets
 RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
+SUPER_PERCENT = 1.095
 
 
 def calculate_tax(remaining_salary, tax_threshold, rate, tax=0):
@@ -19,9 +20,23 @@ def calculate_tax(remaining_salary, tax_threshold, rate, tax=0):
 def get_salary():
 	while True:
 		try:
-			return float(input("Enter yearly salary: $"))
+			salary = float(input("Enter yearly salary: $"))
+			break
 		except ValueError:
 			print("Please enter a valid number without special characters except the decimal point")
+	super_included = input("Is this your salary including super? (Y/N) ")
+	while True:
+		if super_included.lower() in ('y', 'yes'):
+			super_included = True
+			break
+		elif super_included.lower() in ('n', 'no'):
+			super_included = False
+			break
+		else:
+			super_included = input("Please enter either Y or N. ")
+	if super_included:
+		return salary / SUPER_PERCENT
+	return salary 
 
 # If any special characters should be printed, use string except for the case of money
 # The float option should only be used in the case of money
@@ -65,6 +80,7 @@ def main():
 	initial_salary = salary
 	tax = 0
 
+	print("NOT INCLUDING SUPER")
 	for (threshold, rate) in reversed(brackets):
 		(salary, tax) = calculate_tax(salary, threshold, rate, tax)
 	tax_report(initial_salary, tax)
