@@ -23,24 +23,32 @@ def get_salary():
 		except ValueError:
 			print("Please enter a valid number without special characters except the decimal point")
 
+# If any special characters should be printed, use string except for the case of money
+# The float option should only be used in the case of money
 def print_table(contents):
 	# Padding values arrived at through trial and error
-	print("{:.15}{:.15}{:.15}".format(*contents))
-
+	for content in contents:
+		if type(content) == int:
+			print("{:15}".format(content), end="")
+		elif type(content) == float:
+			print("${:<14.2f}".format(content), end="")
+		else:
+			print("{:15}".format(content), end="")
+	print()
 
 def print_brackets(brackets):
-	print("")
+	print()
 	print("CURRENT TAX BRACKET")
 	print("last updated: " + LAST_UPDATE)
 	print_table(["BRACKET", "THRESHOLD", "RATE"])
 	for number in range (1, len(brackets)+1):
 		threshold = brackets[number-1][0]
 		rate = brackets[number-1][1]*100
-		print_table([str(number), "$"+str(threshold), str(rate)+"%"])
-	print("")
+		print_table([str(number), float(threshold), str(rate)+"%"])
+	print()
 
 def tax_report(salary, tax):
-	print("")
+	print()
 	print_table(["TIME INTERVAL", "BEFORE", "AFTER"])
 	print_table(["YEARLY", "$" + str(float(salary)), "$" + str(float(salary-tax))])
 
