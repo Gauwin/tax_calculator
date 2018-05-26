@@ -8,15 +8,6 @@ TAX_THRESHOLDS = (18200, 37000, 87000, 180000)  # Tax Brackets
 RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
 SUPER_PERCENT = 1.095
 
-
-def calculate_tax(remaining_salary, tax_threshold, rate, tax=0):
-	taxable_income = remaining_salary - tax_threshold
-	if taxable_income > 0:
-		tax += taxable_income * rate
-		return (tax_threshold, tax)
-	else:
-		return (remaining_salary, tax)
-
 def get_salary():
 	while True:
 		try:
@@ -66,24 +57,39 @@ def tax_report(salary, tax):
 	salary = float(salary)
 	tax = float(tax)
 	after_tax = salary - tax
-	print()
 	print_table(["TIME INTERVAL", "BEFORE", "AFTER TAX", "TAX"])
 	print_table(["YEARLY", salary, after_tax, tax])
 	print_table(["MONTHLY", salary/12, after_tax/12, tax/12])
 	print_table(["WEEKLY", salary/52, after_tax/52, tax/52])
+	print()
+
+def calculate_tax_bracket(remaining_salary, tax_threshold, rate, tax=0):
+	taxable_income = remaining_salary - tax_threshold
+	if taxable_income > 0:
+		tax += taxable_income * rate
+		return (tax_threshold, tax)
+	else:
+		return (remaining_salary, tax)
+
+def calculate_tax(message, salary, brackets):
+	initial_salary = salary
+	tax = 0
+
+	print()
+	print(message.upper())
+	for (threshold, rate) in reversed(brackets):
+		(salary, tax) = calculate_tax_bracket(salary, threshold, rate, tax)
+	tax_report(initial_salary, tax)
+
 
 def main():
 	brackets = list(zip(TAX_THRESHOLDS, RATES))
 	print_brackets(brackets)
 
-	salary = get_salary()
-	initial_salary = salary
-	tax = 0
+	base_salary = get_salary()
 
-	print("NOT INCLUDING SUPER")
-	for (threshold, rate) in reversed(brackets):
-		(salary, tax) = calculate_tax(salary, threshold, rate, tax)
-	tax_report(initial_salary, tax)
+	calculate_tax("NOT INCLUDING SUPER", base_salary, brackets)
+	calculate_tax("INCLUDING SUPER", base_salary * SUPER_PERCENT, brackets)
 
 if __name__ == '__main__':
 	main()
