@@ -48,17 +48,23 @@ def print_brackets(brackets):
 	print()
 
 def tax_report(salary, tax):
+	salary = float(salary)
+	tax = float(tax)
+	after_tax = salary - tax
 	print()
-	print_table(["TIME INTERVAL", "BEFORE", "AFTER"])
-	print_table(["YEARLY", "$" + str(float(salary)), "$" + str(float(salary-tax))])
+	print_table(["TIME INTERVAL", "BEFORE", "AFTER TAX", "TAX"])
+	print_table(["YEARLY", salary, after_tax, tax])
+	print_table(["MONTHLY", salary/12, after_tax/12, tax/12])
+	print_table(["WEEKLY", salary/52, after_tax/52, tax/52])
 
 def main():
+	brackets = list(zip(TAX_THRESHOLDS, RATES))
+	print_brackets(brackets)
+
 	salary = get_salary()
 	initial_salary = salary
 	tax = 0
-	brackets = list(zip(TAX_THRESHOLDS, RATES))
 
-	print_brackets(brackets)
 	for (threshold, rate) in reversed(brackets):
 		(salary, tax) = calculate_tax(salary, threshold, rate, tax)
 	tax_report(initial_salary, tax)
