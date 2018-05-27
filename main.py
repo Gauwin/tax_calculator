@@ -6,6 +6,8 @@
 LAST_UPDATE = "27/05/2018"
 TAX_THRESHOLDS = (18200, 37000, 87000, 180000)  # Tax Brackets
 TAX_RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
+HELP_THRESHOLDS = (55874, 62239, 68603, 72208, 77619, 84063, 88467, 97378, 103766)
+HELP_RATES = (0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08)
 SUPER_PERCENT = 1.095
 
 def get_salary():
@@ -42,9 +44,9 @@ def print_table(contents):
 			print("{:15}".format(content), end="")
 	print()
 
-def print_brackets(brackets):
+def print_brackets(message, brackets):
 	print()
-	print("CURRENT TAX BRACKET")
+	print(message.upper())
 	print("last updated: " + LAST_UPDATE)
 	print_table(["BRACKET", "THRESHOLD", "RATE"])
 	for number in range (1, len(brackets)+1):
@@ -83,12 +85,14 @@ def calculate_tax(message, salary, brackets):
 
 
 def main():
-	brackets = list(zip(TAX_THRESHOLDS, TAX_RATES))
-	print_brackets(brackets)
+	tax_brackets = list(zip(TAX_THRESHOLDS, TAX_RATES))
+	help_brackets = list(zip(HELP_THRESHOLDS, HELP_RATES))
+	print_brackets("CURRENT TAX BRACKET", tax_brackets)
+	print_brackets("CURRENT HELP BRACKETS", help_brackets)
 
 	base_salary = get_salary()
 
-	calculate_tax("NOT INCLUDING SUPER", base_salary, brackets)
+	calculate_tax("NOT INCLUDING SUPER", base_salary, tax_brackets)
 
 
 if __name__ == '__main__':
