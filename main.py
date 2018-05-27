@@ -9,8 +9,10 @@ TAX_THRESHOLDS = (18200, 37000, 87000, 180000)  # Tax Brackets
 TAX_RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
 HELP_THRESHOLDS = (55874, 62239, 68603, 72208, 77619, 84063, 88467, 97378, 103766)
 HELP_RATES = (0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08)
+TAX_REPORT_COLS = ["TIME INTERVAL", "BEFORE", "AFTER TAX", "TAX"]
+HELP_REPORT_COLS = ["TIME INTERVAL", "BEFORE", "AFTER TAX", "AFTER HELP", "TAX", "HELP"]
 
-def get_salary():
+def get_options():
 	while True:
 		try:
 			salary = float(input("Enter yearly salary: $"))
@@ -53,18 +55,6 @@ def print_brackets(message, brackets, last_update):
 		print_table([str(number), float(threshold), "{:.2f}".format(rate)+"%"])
 	print()
 
-def tax_help_report(salary, tax, help_rate):
-	salary = float(salary)
-	tax = float(tax)
-	after_tax = salary - tax
-	help_repayment = salary  * help_rate
-	after_help = after_tax - help_repayment
-	print_table(["TIME INTERVAL", "BEFORE", "AFTER TAX", "AFTER HELP", "TAX", "HELP"])
-	print_table(["YEARLY", salary, after_tax, after_help, tax, help_repayment])
-	print_table(["MONTHLY", salary/12, after_tax/12, after_help/12, tax/12, help_repayment/12])
-	print_table(["WEEKLY", salary/52, after_tax/52, after_help/52, tax/52, help_repayment/52])
-	print()
-
 def calculate_tax_bracket(remaining_salary, tax_threshold, rate, tax=0):
 	taxable_income = remaining_salary - tax_threshold
 	if taxable_income > 0:
@@ -73,14 +63,11 @@ def calculate_tax_bracket(remaining_salary, tax_threshold, rate, tax=0):
 	else:
 		return (remaining_salary, tax)
 
-def calculate_tax_help(message, salary, brackets, help_rate):
-	initial_salary = salary
+def calculate_tax(salary, brackets):
 	tax = 0
-	print()
-	print(message.upper())
 	for (threshold, rate) in reversed(brackets):
 		(salary, tax) = calculate_tax_bracket(salary, threshold, rate, tax)
-	tax_help_report(initial_salary, tax, help_rate)
+	return tax
 
 def get_help_rate(brackets, salary):
 	for (threshold, rate) in reversed(brackets):
@@ -88,17 +75,41 @@ def get_help_rate(brackets, salary):
 			return rate
 	return 0
 
+def report(message, salary, tax, help_rate=False):
+	print()
+	print(message.upper())
+	
+	salary = float(salary)
+	tax = float(tax)
+	after_tax = salary - tax
+	if help_rate or (type(help_rate) == int and help_rate == 0):
+		help_repayment = salary  * help_rate
+		after_help = after_tax - help_repayment
+		header = HELP_REPORT_COLS
+		data = [salary, after_tax, after_help, tax, help_repayment]
+	else:
+		header = TAX_REPORT_COLS
+		data = [salary, after_tax, tax]
+	print_table(header)
+	print_table(["YEARLY"]  + data)
+	print_table(["MONTHLY"] + list(map(lambda x: x/12, data)))
+	print_table(["WEEKLY"]  + list(map(lambda x: x/52, data)))
+
+
 def main():
 	tax_brackets = list(zip(TAX_THRESHOLDS, TAX_RATES))
 	help_brackets = list(zip(HELP_THRESHOLDS, HELP_RATES))
 	print_brackets("CURRENT TAX BRACKET", tax_brackets, LAST_UPDATE_TAX)
 	print_brackets("CURRENT HELP BRACKETS", help_brackets, LAST_UPDATE_HELP)
 
-	base_salary = get_salary()
-	help_rate = get_help_rate(help_brackets, base_salary)
+	(base_salary, hasHelp) = get_options()
+	tax = calculate_tax(base_salary, tax_brackets)
 
-	calculate_tax_help("NOT INCLUDING SUPER", base_salary, tax_brackets, help_rate)
-
+	if hasHelp:
+		help_rate = get_help_rate(help_brackets, base_salary)
+		report("SALARY REPORT WITH TAX AND HELP", base_salary, tax, help_rate)
+	else:
+		report("SALARY REPORT WITH TAX", base_salary, tax)
 
 if __name__ == '__main__':
 	main()
