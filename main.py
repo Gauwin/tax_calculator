@@ -50,7 +50,7 @@ def print_brackets(brackets):
 	for number in range (1, len(brackets)+1):
 		threshold = brackets[number-1][0]
 		rate = brackets[number-1][1]*100
-		print_table([str(number), float(threshold), str(rate)+"%"])
+		print_table([str(number), float(threshold), "{:.2f}".format(rate)+"%"])
 	print()
 
 def tax_report(salary, tax):
