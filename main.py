@@ -17,6 +17,17 @@ def get_salary():
 			break
 		except ValueError:
 			print("Please enter a valid number without special characters except the decimal point")
+	hasHelp = input("Do you have a HELP/HECS debt? (Y/N) ")
+	while True:
+		if hasHelp.lower() in ('y', 'yes'):
+			hasHelp = True
+			break
+		elif hasHelp.lower() in ('n', 'no'):
+			hasHelp = False
+			break
+		else:
+			hasHelp = input("Please enter either Y or N. ")
+	return (salary, hasHelp)
 
 # If any special characters should be printed, use string except for the case of money
 # The float option should only be used in the case of money
