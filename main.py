@@ -9,7 +9,6 @@ TAX_THRESHOLDS = (18200, 37000, 87000, 180000)  # Tax Brackets
 TAX_RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
 HELP_THRESHOLDS = (55874, 62239, 68603, 72208, 77619, 84063, 88467, 97378, 103766)
 HELP_RATES = (0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08)
-SUPER_PERCENT = 1.095
 
 def get_salary():
 	while True:
@@ -18,19 +17,6 @@ def get_salary():
 			break
 		except ValueError:
 			print("Please enter a valid number without special characters except the decimal point")
-	super_included = input("Is this your salary including super? (Y/N) ")
-	while True:
-		if super_included.lower() in ('y', 'yes'):
-			super_included = True
-			break
-		elif super_included.lower() in ('n', 'no'):
-			super_included = False
-			break
-		else:
-			super_included = input("Please enter either Y or N. ")
-	if super_included:
-		return salary / SUPER_PERCENT
-	return salary 
 
 # If any special characters should be printed, use string except for the case of money
 # The float option should only be used in the case of money
