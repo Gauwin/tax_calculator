@@ -5,7 +5,7 @@
 
 LAST_UPDATE = "27/05/2018"
 TAX_THRESHOLDS = (18200, 37000, 87000, 180000)  # Tax Brackets
-RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
+TAX_RATES = (0.190,  0.325, 0.370, 0.450) # Tax Rate
 SUPER_PERCENT = 1.095
 
 def get_salary():
@@ -83,13 +83,13 @@ def calculate_tax(message, salary, brackets):
 
 
 def main():
-	brackets = list(zip(TAX_THRESHOLDS, RATES))
+	brackets = list(zip(TAX_THRESHOLDS, TAX_RATES))
 	print_brackets(brackets)
 
 	base_salary = get_salary()
 
 	calculate_tax("NOT INCLUDING SUPER", base_salary, brackets)
-	calculate_tax("INCLUDING SUPER", base_salary * SUPER_PERCENT, brackets)
+
 
 if __name__ == '__main__':
 	main()
