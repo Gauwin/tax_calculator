@@ -79,21 +79,27 @@ def get_rate(brackets, salary):
 			return rate
 	return 0
 
-def report(message, salary, tax, help_rate=False):
+def report(message, salary, tax, help_rate=False, medicare_rate=False):
 	print()
 	print(message.upper())
 
 	salary = float(salary)
 	tax = float(tax)
 	after_tax = salary - tax
+	h_before, h_amounts, h_after = ["TIME INTERVAL", "BEFORE"], ["TAX"], ["AFTER TAX"]
+	before, amounts, after = [salary], [tax], [after_tax]
 	if help_rate or (type(help_rate) == int and help_rate == 0):
 		help_repayment = salary  * help_rate
-		after_help = after_tax - help_repayment
-		header = HELP_REPORT_COLS
-		data = [salary, after_tax, after_help, tax, help_repayment]
-	else:
-		header = TAX_REPORT_COLS
-		data = [salary, after_tax, tax]
+		after_help = after[-1] - help_repayment
+		h_after.append("AFTER HELP"), h_amounts.append("HELP")
+		after.append(after_help), amounts.append(help_repayment)
+	if medicare_rate:
+		medicare_repayment = salary * medicare_rate
+		after_medicare = after[-1] - medicare_repayment
+		h_after.append("AFTER MEDICARE"), h_amounts.append("MEDICARE")
+		after.append(after_medicare), amounts.append(medicare_repayment)
+	header = h_before + h_amounts + h_after
+	data = before + amounts + after
 	print_table(header)
 	print_table(["YEARLY"]  + data)
 	print_table(["MONTHLY"] + list(map(lambda x: x/12, data)))
@@ -123,7 +129,7 @@ def main():
 		report_title += " AND MEDICARE LEVY"
 		medicare_levy = MEDICARE_LEVY_RATE
 
-	report(report_title, base_salary, tax, help_rate)
+	report(report_title, base_salary, tax, help_rate, medicare_rate)
 
 if __name__ == '__main__':
 	main()
