@@ -18,3 +18,12 @@ def calculate_tax(income, sorted_brackets):
         last_threshold = threshold
         taxed += tax_amount * pair["rate"]
     return (income - taxed, taxed)
+
+def flat_rate_tax_calculator(income, sorted_brackets):
+    taxed = 0
+    for pair in sorted_brackets[::-1]:
+        threshold = pair["threshold"]
+        if threshold < income:
+            taxed = income * pair["rate"]
+            break
+    return (income - taxed, taxed)
