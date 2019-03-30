@@ -7,6 +7,16 @@
 
 import tax_brackets_data
 
+def zip_brackets(thresholds, rates):
+    if len(thresholds) is not len(rates):
+        return None
+    if len(thresholds) is 0:
+        return []
+    brackets = []
+    for i in range(len(thresholds)):
+        brackets.append({"threshold": thresholds[i], "rate": rates[i]})
+    return brackets
+
 def calculate_tax(income, sorted_brackets):
     taxed = 0
     last_threshold = income
