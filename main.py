@@ -5,6 +5,8 @@
 # Author: Alvin Shi
 # Date: 28/03/2019
 
+import tax_brackets_data
+
 def calculate_tax(income, sorted_brackets):
     taxed = 0
     last_threshold = income
