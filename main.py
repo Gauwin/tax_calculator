@@ -6,6 +6,7 @@
 # Date: 28/03/2019
 
 from tax_brackets_data import *
+from user_input import get_settings
 from calculate_tax import calculate_tiered_tax, calculate_flat_rate_tax
 
 def zip_brackets(thresholds, rates):
