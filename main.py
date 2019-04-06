@@ -5,7 +5,7 @@
 # Author: Alvin Shi
 # Date: 28/03/2019
 
-import tax_brackets_data
+from tax_brackets_data import *
 
 def zip_brackets(thresholds, rates):
     if len(thresholds) != len(rates):
