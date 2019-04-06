@@ -6,6 +6,7 @@
 # Date: 28/03/2019
 
 from tax_brackets_data import *
+from calculate_tax import calculate_tiered_tax, calculate_flat_rate_tax
 
 def zip_brackets(thresholds, rates):
     if len(thresholds) != len(rates):
@@ -17,25 +18,4 @@ def zip_brackets(thresholds, rates):
         brackets.append({"threshold": thresholds[i], "rate": rates[i]})
     return brackets
 
-def calculate_tax(income, sorted_brackets):
-    taxed = 0
-    last_threshold = income
-    for pair in sorted_brackets[::-1]:
-        threshold = pair["threshold"]
-        tax_amount = last_threshold - threshold
 
-        if tax_amount <= 0:
-            continue
-
-        last_threshold = threshold
-        taxed += tax_amount * pair["rate"]
-    return (income - taxed, taxed)
-
-def flat_rate_tax_calculator(income, sorted_brackets):
-    taxed = 0
-    for pair in sorted_brackets[::-1]:
-        threshold = pair["threshold"]
-        if threshold < income:
-            taxed = income * pair["rate"]
-            break
-    return (income - taxed, taxed)
