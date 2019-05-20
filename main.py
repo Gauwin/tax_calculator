@@ -20,9 +20,9 @@ def main():
     (income, family_income, has_help) = get_settings()
     # OUTPUT
     # [income, tax, hecs, medicare, after_tax]
-    (after_tax, tax) = calculate_tiered_tax(income, tax_brackets)
-    (after_hecs, hecs) = calculate_flat_rate_tax(income, hecs_brackets)
-    (after_medicare, medicare) = calculate_flat_rate_tax(income, medicare_brackets)
+    tax = calculate_tiered_tax(income, tax_brackets)
+    hecs = calculate_flat_rate_tax(income, hecs_brackets)
+    medicare = calculate_flat_rate_tax(income, medicare_brackets)
     post_tax = income - tax - hecs - medicare
     print([income, tax, hecs, medicare, post_tax])
 

@@ -10,7 +10,7 @@ def calculate_tiered_tax(income, sorted_brackets):
 
         last_threshold = threshold
         taxed += tax_amount * pair["rate"]
-    return (income - taxed, taxed)
+    return taxed
 
 def calculate_flat_rate_tax(income, sorted_brackets):
     taxed = 0
@@ -19,4 +19,4 @@ def calculate_flat_rate_tax(income, sorted_brackets):
         if threshold < income:
             taxed = income * pair["rate"]
             break
-    return (income - taxed, taxed)
+    return taxed
